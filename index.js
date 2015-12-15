@@ -15,11 +15,19 @@
     }
 
     var diplayEulerDiff = function(target) {
+        var dx = rad2deg(target.x), dy = rad2deg(target.y), dz = rad2deg(target.z);
         iH = "orientation euler diff after quaternions<br>"
-        iH += "x = " + rad2deg(target.x) + "<br>"
-        iH += "y = " + rad2deg(target.y) + "<br>"
-        iH += "z = " + rad2deg(target.z) + "<br>"    
-        document.getElementById("euler-diff").innerHTML = iH;        
+        iH += "x = " + dx + "<br>"
+        iH += "y = " + dy + "<br>"
+        iH += "z = " + dz + "<br>"    
+        document.getElementById("euler-diff").innerHTML = iH;    
+        if (Math.abs(dx) > 20 || Math.abs(dy) > 20 || Math.abs(dz) > 20) {
+            document.getElementById("euler-diff").style.background = "red";
+        } else {
+            document.getElementById("euler-diff").style.background = "white";
+        }
+
+
     }
 
     var deg2rad = function(deg) {
