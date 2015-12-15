@@ -14,6 +14,14 @@
 
     }
 
+    var diplayEulerDiff = function(target) {
+        iH = "orientation euler diff after quaternions<br>"
+        iH += "x = " + rad2deg(target.x) + "<br>"
+        iH += "y = " + rad2deg(target.y) + "<br>"
+        iH += "z = " + rad2deg(target.z) + "<br>"    
+        document.getElementById("euler-diff").innerHTML = iH;        
+    }
+
     var deg2rad = function(deg) {
         return deg*(Math.PI/180);
     }
@@ -29,8 +37,10 @@
         // Step: HERE WE GO FROM EULER TO QUATERNION:
         // ====================================================================
         
+        var order = 'XYZ';
+
         // TODO: Check that the order is correct. I think it is but not sure.
-        qcurrent.setFromEuler(deg2rad(doe.alpha), deg2rad(doe.beta), deg2rad(doe.gamma), 'XYZ');
+        qcurrent.setFromEuler(deg2rad(doe.alpha), deg2rad(doe.beta), deg2rad(doe.gamma), order);
         qcurrent.normalize();
 
         // Save if we don't have a starting position yet
@@ -40,8 +50,12 @@
 
         // Step: CALCULATE ROTATION FROM OLD TO NEW ORIENTATION
         // ====================================================================
-        var qinv = qcurrent.inverse()
-        var qdiff = _qstart.mult(qinv)
+        var qinv = qcurrent.inverse();
+        var qdiff = _qstart.mult(qinv);
+
+        var eulerdiff = new Vec3();
+        qdiff.toEuler(eulerdiff, 'YZX');
+        diplayEulerDiff(eulerdiff);
 
 
         // Step: Alternative: Calculate the dot product to get angle
@@ -52,7 +66,7 @@
         qdot += qcurrent.z * _qstart.z;
         qdot += qcurrent.w * _qstart.w;
 
-        var angle = rad2deg(Math.acos(qdot));
+        var angle = rad2deg(2*Math.acos(qdot));
 
         document.getElementById("angle-diff-dot").innerHTML = angle;
 
